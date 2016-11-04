@@ -26,4 +26,11 @@ With this method, the jQuery events will trigger at the exact moment that the mo
 
 Make sure to set up event listeners *before* initializing jQuery Breakpoint Events. The `bp:xx:initial` event is triggered immediately upon initialization, so if an event listener is created after jQuery Breakpoint Events in your code, it won't detect that `initial` event for the breakpoint.
 
-If the `modelSelector` does not find an element on the page when the plugin is initialized, the plugin will abort early and will not listen for the `resize` event on the window. The `modelSelector` should point to an element that is always present on the page no matter what - not something that is created or removed dynamically.
+If the `modelSelector` does not match an element on the page when the plugin is initialized, the plugin will abort early and will not listen for the `resize` event on the window. The `modelSelector` should point to an element that is always present on the page no matter what, not something that is created or removed dynamically.
+
+### Alternative methods for detecting breakpoints with JavaScript ###
+
+This is not new or innovative, but it is nicely packaged and easy to use. There are a few other methods to accomplish essentially the same thing. If this doesn't do the trick for you, check out one of these:
+
+ * item 1
+ * item 2
