@@ -2,9 +2,9 @@
 
 A plugin that triggers jQuery events when CSS media query breakpoints are reached, allowing for JavaScript actions to be hooked to your breakpoints.
 
-It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom events to tell you which breakpoint you're on. You can then hook functions to these events.
+It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom events to tell you which breakpoint you're on along with some other more specific information. You can then hook functions to these events.
 
-The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint (`xs`) is fluid while each of the larger breakpoints use fixed-width outer containers. This is the most common way to do things, but if you need fluid containers, or your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
+The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint is fluid and that the larger breakpoints use fixed-width outer containers. This is the most common way to do things, but if you need fluid containers, or your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
 
 ## Usage ##
 
@@ -46,7 +46,7 @@ In many situations, this single event isn't specific enough. You may need to hoo
 | Setting             | Default Value    | Description
 |:--------------------|:-----------|:------------
 | `defaultBreakpoint` | `xs`       | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` to the first defined breakpoint).
-| `breakpoints`       | `{ 'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
+| `breakpoints`       | `{ 'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. There is no limit to the number of breakpoints that can be defined, but only one can be used at a given width. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
 | `modelSelector`     | `'.container'` | jQuery selector for the element to use as a model.
 | `eventTarget`       | `window`   | jQuery selector for the element the event should trigger on.
 | `debug`             | `false`      | If true, write all triggered events to the browser console.
