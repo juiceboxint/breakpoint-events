@@ -1,6 +1,6 @@
 /**
  * jQuery Breakpoint Events
- * v1.0.0, 11/4/2016
+ * v1.0.0, 11/7/2016
  * https://github.com/juiceboxint/breakpoint-events
  *
  * Copyright Kevin VandeKrol, Juicebox Interactive
@@ -16,12 +16,12 @@
 		settings = $.extend({}, $.fn['breakpointEvents'].defaults, settings);
 
 		var $el = $(element),
-			vars = {
+		    vars = {
 		        el          : element,
 		        currentView : settings.defaultBreakpoint,
 		        initial     : true,
 		        modelWidth  : 0
-			};
+		    };
 
 		/**
 		 * Initialize plugin.
@@ -62,19 +62,23 @@
 			// Loop through breakpoints and try to find a match with the model's current width.
 			var foundBreakpoint = false;
 			$.each(settings.breakpoints, function(breakpoint, size) {
-				if (!foundBreakpoint && size === vars.modelWidth) {
+				if (!foundBreakpoint && size == vars.modelWidth) {
 					if (breakpoint !== vars.currentView) {
 						if (vars.initial === false) {
-							$(settings.eventTarget).trigger('bp:' + vars.currentView + ':exit');
-							$(settings.eventTarget).trigger('bp:' + breakpoint + ':enter');
+							$(settings.eventTarget).first().trigger('bp:' + vars.currentView + ':exit');
+							$(settings.eventTarget).first().trigger('bp:' + breakpoint);
+							$(settings.eventTarget).first().trigger('bp:' + breakpoint + ':enter');
 							if (settings.debug) {
-								console.log('Triggered breakpoint event: bp:' + vars.currentView + ':exit (01)');
-								console.log('Triggered breakpoint event: bp:' + breakpoint + ':enter (02)');
+								console.log('Triggered breakpoint event: bp:' + vars.currentView + ':exit');
+								console.log('Triggered breakpoint event: bp:' + breakpoint);
+								console.log('Triggered breakpoint event: bp:' + breakpoint + ':enter');
 							}
 						} else {
-							$(settings.eventTarget).trigger('bp:' + breakpoint + ':initial');
+							$(settings.eventTarget).first().trigger('bp:' + breakpoint);
+							$(settings.eventTarget).first().trigger('bp:' + breakpoint + ':initial');
 							if (settings.debug) {
-								console.log('Triggered breakpoint event: bp:' + breakpoint + ':initial (03)');
+								console.log('Triggered breakpoint event: bp:' + breakpoint);
+								console.log('Triggered breakpoint event: bp:' + breakpoint + ':initial');
 							}
 							vars.initial = false;
 						}
@@ -89,25 +93,31 @@
 			if (!foundBreakpoint && vars.currentView != settings.defaultBreakpoint) {
 				if (!vars.initial) {
 					// Trigger exit & entry events if needed
-					$(settings.eventTarget).trigger('bp:' + vars.currentView + ':exit');
-					$(settings.eventTarget).trigger('bp:' + settings.defaultBreakpoint + ':enter');
+					$(settings.eventTarget).first().trigger('bp:' + vars.currentView + ':exit');
+					$(settings.eventTarget).first().trigger('bp:' + settings.defaultBreakpoint);
+					$(settings.eventTarget).first().trigger('bp:' + settings.defaultBreakpoint + ':enter');
 					if (settings.debug) {
-						console.log('Triggered breakpoint event: bp:' + vars.currentView + ':exit (04)');
-						console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint + ':enter (05)');
+						console.log('Triggered breakpoint event: bp:' + vars.currentView + ':exit');
+						console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint);
+						console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint + ':enter');
 					}
 				} else {
 					// This will only trigger if something is very wrong, but it's a safeguard anyway
-					$(settings.eventTarget).trigger('bp:' + settings.defaultBreakpoint + ':initial');
+					$(settings.eventTarget).first().trigger('bp:' + settings.defaultBreakpoint);
+					$(settings.eventTarget).first().trigger('bp:' + settings.defaultBreakpoint + ':initial');
 					if (settings.debug) {
-						console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint + ':initial (06)');
+						console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint);
+						console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint + ':initial');
 					}
 					vars.initial = false;
 				}
 				vars.currentView = settings.defaultBreakpoint;
 			} else if (vars.initial) {
-				$(settings.eventTarget).trigger('bp:' + settings.defaultBreakpoint + ':initial');
+				$(settings.eventTarget).first().trigger('bp:' + settings.defaultBreakpoint);
+				$(settings.eventTarget).first().trigger('bp:' + settings.defaultBreakpoint + ':initial');
 				if (settings.debug) {
-					console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint + ':initial (07)');
+					console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint);
+					console.log('Triggered breakpoint event: bp:' + settings.defaultBreakpoint + ':initial');
 				}
 				vars.initial = false;
 			}
@@ -148,13 +158,13 @@
 
 
 		/**
-		 * Get/set a plugin option.
-		 * Get usage: jQuery(window).breakpointEvents('option', 'key');
-		 * Set usage: jQuery(window).breakpointEvents('option', 'key', 'value');
+		 * Get/set a plugin setting.
+		 * Get usage: jQuery(window).breakpointEvents('setting', 'key');
+		 * Set usage: jQuery(window).breakpointEvents('setting', 'key', 'value');
 		 *
 		 * @since 1.0.0
 		 */
-		function option(key, val) {
+		function setting(key, val) {
 			if (val) {
 				settings[key] = val;
 			} else {
@@ -197,10 +207,10 @@
 
 		// Define public methods
 		return {
-			option: option,
+			setting: setting,
 			variable: variable,
 			destroy: destroy,
-			checkBreakpoint: checkBreakpoint
+			refresh: checkBreakpoint
 		};
 	}
 
@@ -208,35 +218,25 @@
 	 * Plugin definition.
 	 */
 	$.fn['breakpointEvents'] = function(settings) {
-		// If the first parameter is a string, treat this as a call to a public method.
 		if (typeof arguments[0] === 'string') {
 			var methodName = arguments[0];
 			var args = Array.prototype.slice.call(arguments, 1);
 			var returnVal;
 			this.each(function() {
-				// Check that the element has a plugin instance, and that the requested public method exists.
 				if ($.data(this, 'breakpointEvents') && typeof $.data(this, 'breakpointEvents')[methodName] === 'function') {
-					// Call the method of the plugin instance, and pass it the supplied arguments.
 					returnVal = $.data(this, 'breakpointEvents')[methodName].apply(this, args);
 				} else {
 					throw new Error('Method ' +  methodName + ' does not exist on jQuery.breakpointEvents');
 				}
 			});
 			if (returnVal !== undefined){
-				// If the method returned a value, return the value.
 				return returnVal;
 			} else {
-				// Otherwise, returning 'this' preserves chainability.
 				return this;
 			}
-		// If the first parameter is an object (settings), or was omitted,
-		// instantiate a new instance of the plugin.
-		} else if (typeof settings === "object" || !settings) {
+		} else if (typeof settings === 'object' || !settings) {
 			return this.each(function() {
-				// Only allow the plugin to be instantiated once.
 				if (!$.data(this, 'breakpointEvents')) {
-					// Pass settings to plugin constructor, and store plugin
-					// instance in the element's jQuery data object.
 					$.data(this, 'breakpointEvents', new Plugin(this, settings));
 				}
 			});
@@ -247,7 +247,7 @@
 	 * Default settings, configured to work with the Bootstrap grid system.
 	 * These can be overwritten when initializing the plugin by
 	 * passing an object literal, or after initialization:
-	 * jQuery(window).breakpointEvents('option', 'key', 'value');
+	 * jQuery(window).breakpointEvents('setting', 'key', 'value');
 	 */
 	$.fn['breakpointEvents'].defaults = {
 		defaultBreakpoint: 'xs',
