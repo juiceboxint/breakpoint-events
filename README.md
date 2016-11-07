@@ -4,7 +4,7 @@ A plugin that triggers jQuery events when CSS media query breakpoints are reache
 
 It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom events to tell you which breakpoint you're on along with some other more specific information. You can then hook functions to these events.
 
-The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint is fluid and that the larger breakpoints use fixed-width outer containers. This is the most common way to do things, but if you need fluid containers, or your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
+The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint is fluid and that the larger breakpoints use fixed-width outer containers. This is the most common way to do things, but if you need fluid containers, or if your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
 
 ## Usage ##
 
