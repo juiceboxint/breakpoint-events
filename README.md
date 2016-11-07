@@ -1,10 +1,10 @@
 # jQuery Breakpoint Events #
 
-A plugin that triggers jQuery events when CSS media query breakpoints are reached, allowing for jQuery actions to be hooked to your breakpoints.
+A plugin that triggers jQuery events when CSS media query breakpoints are reached, allowing for JavaScript actions to be hooked to your breakpoints.
 
 It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom events to tell you which breakpoint you're on. You can then hook functions to these events.
 
-The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint (`xs`) is fluid while each of the other breakpoints use fixed-width outer containers. This is the way most people do things, but if you need fluid containers, or your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
+The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint (`xs`) is fluid while each of the larger breakpoints use fixed-width outer containers. This is the most common way to do things, but if you need fluid containers, or your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
 
 ## Usage ##
 
@@ -23,6 +23,23 @@ jQuery(document).ready(function() {
 	});
 });
 ```
+
+When a breakpoint changes, a `bp:xx` event will trigger on the `window`, where `xx` is the keyword for the breakpoint that was just entered (e.g. `bp:md`). You can hook a function to this event like this:
+
+```javascript
+jQuery(window).on('bp:md', function() {
+	// do stuff
+});
+```
+
+If you'd rather the event be triggered on a different element than `window`, you can pass in an `eventTarget` value on initialization.
+
+In many situations, this single event isn't specific enough. You may need to hook a function to a breakpoint's exit irrespective of which one was entered. Or, you may need to do different things depending on whether it's the initial page load or the breakpoint was arrived at from another size. In addition to the `bp:xx` event, any of the following three events are also triggered depending on context.
+
+  * `bp:xx:initial` indicates the breakpoint on initial page load. It's triggered immediately and only once.
+  * `bp:xx:enter` indicates which breakpoint was entered and is always accompanied by a `bp:xx:exit` event.
+  * `bp:xx:exit` indicates which breakpoint was left and is always accompanied by a `bp:xx:enter` event.
+
 
 ## Settings ##
 
@@ -93,7 +110,7 @@ With this method, the jQuery events will trigger at the exact moment that the mo
 
 Make sure to set up event listeners before initializing jQuery Breakpoint Events. The `bp:xx:initial` event is triggered immediately upon initialization, so if an event listener is created after jQuery Breakpoint Events in your code, it won't detect that `initial` event for the breakpoint.
 
-There is not a way to do a "greater than" or "less than" comparison. If you want to attach an action to `md` and up, you'd do it as follows:
+There is not a way to do a "greater than" or "less than" comparison. If you want to attach an action to `md` and up, you'd want to attach the action to each event individually:
 
 ```javascript
 jQuery(window).on('bp:md bp:lg', function() { 
@@ -101,9 +118,9 @@ jQuery(window).on('bp:md bp:lg', function() {
 });
 ```
 
-Because of this, you will want to write your hooked functions in such a way that the actions are only performed once regardless of how many times the function is called. For instance, if you need to move an element to another place in the DOM on `md` and `lg`, your function should check to make sure it's not already been moved first before trying to move it.
+Because of the way this is done, you will want to write your hooked functions in such a way that the actions are only performed once regardless of how many times the function is called. For instance, if you need to move an element to another place in the DOM on `md` and `lg`, your function should check to make sure it's not already been moved first before trying to move it.
 
-If the `modelSelector` does not match an element on the page when the plugin is initialized, the plugin will abort early and will not listen for the `resize` event on the window. The `modelSelector` should point to an element that is always present on the page no matter what, not something that is created or removed dynamically. (However, if you'd prefer, it can be a zero-height element that exists only for this script to watch.)
+If the `modelSelector` does not match an element on the page when the plugin is initialized, the plugin will abort early and will not listen for the `resize` event on the window. The `modelSelector` should point to an element that is always present on the page no matter what, not something that is created or removed dynamically. (If you'd prefer, it can be a zero-height element that exists only for this script to watch.)
 
 ### Alternative methods for detecting breakpoints with JavaScript ###
 
