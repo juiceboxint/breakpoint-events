@@ -10,7 +10,7 @@ The default settings are tuned to the four breakpoints in [Bootstrap 3](http://g
 
 jQuery Breakpoint Events is initialized like this:
 
-```
+```javascript
 jQuery(document).ready(function() {
 	jQuery(window).breakpointEvents({
 		defaultBreakpoint: 'xs',
@@ -23,9 +23,6 @@ jQuery(document).ready(function() {
 	});
 });
 ```
-
-
-
 
 ## Settings ##
 
@@ -72,7 +69,7 @@ Change the setting for `keyName` to `newValue`: (be very, very careful with this
 
 The `setting` and `variable` methods are described above. The other available method is the `refresh` method:
 
-```jQuery(window).breakpointEvents('refresh');
+```jQuery(window).breakpointEvents('refresh');```
 
 This will recheck the model element's width and trigger the appropriate events. It's useful if the size of the model has been changed outside of the `resize` event, or if you have updated the breakpoint settings after initialization. It will only trigger events if the breakpoint has changed. It will not re-trigger the event for the current breakpoint.
 
@@ -88,9 +85,11 @@ Make sure to set up event listeners before initializing jQuery Breakpoint Events
 
 There is not a way to do a "greater than" or "less than" comparison. If you want to attach an action to `md` and up, you'd do it as follows:
 
-```jQuery(window).on('bp:md bp:lg', function() { 
+```javascript
+jQuery(window).on('bp:md bp:lg', function() { 
     // do stuff 
-});```
+});
+```
 
 Because of this, you will want to write your hooked functions in such a way that the actions are only performed once regardless of how many times the function is called. For instance, if you need to move an element to another place in the DOM on `md` and `lg`, your function should check to make sure it's not already been moved first before trying to move it.
 
