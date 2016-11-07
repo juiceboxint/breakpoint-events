@@ -2,98 +2,83 @@
 
 A plugin that triggers jQuery events when CSS media query breakpoints are reached, allowing for jQuery actions to be hooked to your breakpoints.
 
-It watches a designated HTML element on the page as a "model" 
+It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom events to tell you which breakpoint you're on. You can then hook functions to these events.
 
-jQuery Breakpoint Events was designed with mobile-first development in mind, and 
+The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint (`xs`) is fluid while each of the other breakpoints use fixed-width outer containers. This is the way most people do things, but if you need fluid containers, or your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
 
-The default settings are tuned to [Bootstrap](http://getbootstrap.com/)'s four breakpoints (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model element. If your responsive framework differs from Bootstrap in more than just terminology and breakpoint widths, this may not be the right tool for you.
+## Usage ##
 
-### Settings ###
+jQuery Breakpoint Events is initialized like this:
 
-| Setting             | Default    | Description
+```
+jQuery(document).ready(function() {
+	jQuery(window).breakpointEvents({
+		defaultBreakpoint: 'xs',
+		breakpoints: {
+			'sm' : 750,
+			'md' : 970,
+			'lg' : 1170
+		},
+		modelSelector: '.container'
+	});
+});
+```
+
+
+
+
+## Settings ##
+
+| Setting             | Default Value    | Description
 |:--------------------|:-----------|:------------
 | `defaultBreakpoint` | `xs`       | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` to the first defined breakpoint).
-| `breakpoints`       | `{'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. Note that this is not necessarily the media query breakpoints themselves, but the defined width of the `modelElement` inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
+| `breakpoints`       | `{'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
 | `modelSelector`     | `'.container'` | jQuery selector for the element to use as a model.
 | `eventTarget`       | `window`   | jQuery selector for the element the event should trigger on.
-| `debug`             | false      | If true, write all triggered events to the browser console.
+| `debug`             | `false`      | If true, write all triggered events to the browser console.
 
 
-#### Retrieving or overriding a setting ####
+### Retrieving or overriding a setting ###
 
 Retrieve the current setting for `keyName`:
 
 ```jQuery(window).breakpointEvents('setting', 'keyName');```
 
-Change the setting for `keyName` to `newValue`: (Be very, very careful with this)
+Change the setting for `keyName` to `newValue`: (be very, very careful with this!)
 
 ```jQuery(window).breakpointEvents('setting', 'keyName', `newValue`);```
 
-### Variables ###
+## Variables ##
 
 These are used internally to the plugin, but can be viewed or changed at any time with the `variable` method.
 
 | Variable            | Description
 |:--------------------|:------------
-| `modelWidth`        | The current width of the element matched by `modelSelector`.
 | `currentView`       | The keyword for the current breakpoint view (e.g. `md`).
 | `intitial`          | Whether this breakpoint 
+| `modelWidth`        | The current width of the element matched by `modelSelector`.
 
-#### Retrieving or overriding a variable ####
+### Retrieving or overriding a variable ###
 
 Retrieve the current setting for `keyName`:
 
 ```jQuery(window).breakpointEvents('setting', 'keyName');```
 
-Change the setting for `keyName` to `newValue`: (Be very, very careful with this)
+Change the setting for `keyName` to `newValue`: (be very, very careful with this!)
 
-```jQuery(window).breakpointEvents('setting', 'keyName', `newValue`);```
+```jQuery(window).breakpointEvents('setting', 'keyName', 'newValue');```
 
 ### Methods ###
 
-Methods are available to _get_ or _set_ a setting or variable after initialization, as well as to trigger a re-check of the current breakpoint outside.
+The `setting` and `variable` methods are described above. The other available method is the `refresh` method:
 
-#### Retrieve a plugin setting ####
+```jQuery(window).breakpointEvents('refresh');
 
-```jQuery(window).breakpointEvents('setting', 'keyName');```
-
-This retrieves the current setting for `keyName`.
-
-#### Change a plugin setting ####
-
-```jQuery(window).breakpointEvents('setting', 'keyName', `newValue`);```
-
-This changes the setting for `keyName` to `newValue`. Be very, very careful with this!
-
-#### Retrieve a plugin variable ####
-
-```jQuery(window).breakpointEvents('variable', 'varName');```
-
-This retrieves the current setting for `varName`. 
-
-#### Change a plugin variable ####
-
-```jQuery(window).breakpointEvents('variable', 'varName', `newValue`);```
-
-This changes the current value for `varName` to `newValue`. Be very, very careful with this!
-
-
-
-...to retrieve a setting or option, or:
-
-`jQuery(window).breakpointEvents('methodName', 
-
-### Usage ###
-
-jQuery Breakpoint Events should be used 
-
-Make sure to set up event listeners *before* initializing jQuery Breakpoint Events. The `bp:xx:initial` event is triggered immediately upon initialization, so if an event listener is set up after JQBE in your code, it won't see that `initial` event.
-
-It should always be attached to `window` since this is the element that receives the `resize` event that the plugin is built around.
+This will recheck the model element's width and trigger the appropriate events. It's useful if the size of the model has been changed outside of the `resize` event, or if you have updated the breakpoint settings after initialization. It will only trigger events if the breakpoint has changed. It will not re-trigger the event for the current breakpoint.
 
 ### Why not just use JavaScript to detect window.innerWidth and hook your actions to that? ###
 
-JavaScript's viewport detection is messy and inconsistent between browsers. Plus, since JavaScript and CSS are different engines, they are not guaranteed to detect the breakpoint at the same instant. Unless JavaScript delegates its detection to CSS, the actions will be out of sync. 
+JavaScript's viewport detection is messy and inconsistent between browsers. Also, since JavaScript and CSS are different engines, they are not guaranteed to detect the breakpoint at the same instant. Unless JavaScript delegates its detection to CSS, the actions will be out of sync. 
 
 With this method, the jQuery events will trigger at the exact moment that the model's element width is changed by CSS media queries. We are essentially hooking the jQuery events directly to the media queries.
 
