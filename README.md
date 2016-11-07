@@ -78,16 +78,16 @@ These are used internally to the plugin, but can be viewed or changed at any tim
 
 ### Retrieving or overriding a variable ###
 
-Retrieve the current setting for `keyName`:
+Retrieve the current setting for `varName`:
 
 ```javascript
-jQuery(window).breakpointEvents('setting', 'keyName');
+jQuery(window).breakpointEvents('variable', 'varName');
 ```
 
-Change the setting for `keyName` to `newValue`: (be very, very careful with this!)
+Change the setting for `varName` to `newValue`: (be very, very careful with this!)
 
 ```javascript
-jQuery(window).breakpointEvents('setting', 'keyName', 'newValue');
+jQuery(window).breakpointEvents('variable', 'varName', 'newValue');
 ```
 
 ### Methods ###
