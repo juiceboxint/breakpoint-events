@@ -45,7 +45,7 @@ In many situations, this single event isn't specific enough. You may need to hoo
 
 | Setting             | Default Value    | Description
 |:--------------------|:-----------|:------------
-| `defaultBreakpoint` | `xs`       | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` up to the first defined breakpoint).
+| `defaultBreakpoint` | `'xs'`       | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` up to the first defined breakpoint).
 | `breakpoints`       | `{ 'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. There is no limit to the number of breakpoints that can be defined, but only one can be used at a given width. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
 | `modelSelector`     | `'.container'` | jQuery selector for the element to use as a model.
 | `eventTarget`       | `window`   | jQuery selector for the element the event should trigger on.
