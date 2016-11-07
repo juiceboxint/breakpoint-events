@@ -100,12 +100,6 @@ jQuery(window).breakpointEvents('refresh');
 
 This will recheck the model element's width and trigger the appropriate events. It's useful if the size of the model has been changed outside of the `resize` event, or if you have updated the breakpoint settings after initialization. It will only trigger events if the breakpoint has changed. It will not re-trigger the event for the current breakpoint.
 
-### Why not just use JavaScript to detect window.innerWidth and hook your actions to that? ###
-
-JavaScript's viewport detection is messy and inconsistent between browsers. Also, since JavaScript and CSS are different engines, they are not guaranteed to detect the breakpoint at the same instant. Unless JavaScript delegates its detection to CSS, the actions will be out of sync. 
-
-With this method, the jQuery events will trigger at the exact moment that the model's element width is changed by CSS media queries. We are essentially hooking the jQuery events directly to the media queries.
-
 ### Things to be aware of ###
 
 Make sure to set up event listeners before initializing jQuery Breakpoint Events. The `bp:xx:initial` event is triggered immediately upon initialization, so if an event listener is created after jQuery Breakpoint Events in your code, it won't detect that `initial` event for the breakpoint.
@@ -121,6 +115,13 @@ jQuery(window).on('bp:md bp:lg', function() {
 Because of the way this is done, you will want to write your hooked functions in such a way that the actions are only performed once regardless of how many times the function is called. For instance, if you need to move an element to another place in the DOM on `md` and `lg`, your function should check to make sure it's not already been moved first before trying to move it.
 
 If the `modelSelector` does not match an element on the page when the plugin is initialized, the plugin will abort early and will not listen for the `resize` event on the window. The `modelSelector` should point to an element that is always present on the page no matter what, not something that is created or removed dynamically. (If you'd prefer, it can be a zero-height element that exists only for this script to watch.)
+
+### Why not just use JavaScript to detect window.innerWidth and be done with it? ###
+
+JavaScript's viewport detection is messy and inconsistent between browsers. Also, since JavaScript and CSS are different engines, they are not guaranteed to detect the breakpoint at the same instant. Unless JavaScript delegates its detection to CSS, the actions will be out of sync. 
+
+With this method, the jQuery events will trigger at the exact moment that the model's element width is changed by CSS media queries. We are essentially hooking the jQuery events directly to the media queries.
+
 
 ### Alternative methods for detecting breakpoints with JavaScript ###
 
