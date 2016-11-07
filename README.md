@@ -2,9 +2,13 @@
 
 A plugin that triggers jQuery events when CSS media query breakpoints are reached, allowing for JavaScript actions to be hooked to your breakpoints.
 
-It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom events to tell you which breakpoint you're on along with some other more specific information. You can then hook functions to these events.
+It watches a designated HTML element on the page as a "model". When the model's width is changed via CSS media queries, this plugin triggers a series of custom jQuery events to tell you which breakpoint you're on along with some other more specific information. You can then hook functions to these events.
 
-The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch. It was designed with a mobile-first approach in mind. It assumes that the smallest breakpoint is fluid and that the larger breakpoints use fixed-width outer containers. This is the most common way to do things, but if you need fluid containers, or if your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
+If you've ever put two functionally-equivalent elements on a page and then set one or the other to `display: none` depending on screen size... this is for you. Set up a function that moves or transforms the element in the DOM and attach it to the event for the applicable breakpoints.
+
+If you've ever been concerned about what kind of resources that video background is eating up even when it's hidden on the mobile view... this is for you. Attach the instantiation of the video background to only the larger breakpoints, and destroy it when exiting those breakpoints.
+
+If you've ever been concerned about the performance implications of running a complicated function on the `resize` or `scroll` events that you only need on certain screen sizes... well, you get the idea.
 
 ## Usage ##
 
@@ -23,6 +27,8 @@ jQuery(document).ready(function() {
 	});
 });
 ```
+
+The default settings are tuned to the four breakpoints in [Bootstrap 3](http://getbootstrap.com/) (`xs`, `sm`, `md`, `lg`), using Bootstrap's `.container` as the model to watch.
 
 When a breakpoint changes, a `bp:xx` event will trigger on the `window`, where `xx` is the keyword for the breakpoint that was just entered (e.g. `bp:md`). You can hook a function to this event like this:
 
@@ -43,13 +49,13 @@ In many situations, this single event isn't specific enough. You may need to hoo
 
 ## Settings ##
 
-| Setting             | Default Value    | Description
-|:--------------------|:-----------|:------------
-| `defaultBreakpoint` | `'xs'`       | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` up to the first defined breakpoint).
+| Setting             | Default Value  | Description
+|:--------------------|:---------------|:------------
+| `defaultBreakpoint` | `'xs'`         | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` up to the first defined breakpoint).
 | `breakpoints`       | `{ 'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. There is no limit to the number of breakpoints that can be defined, but only one can be used at a given width. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
 | `modelSelector`     | `'.container'` | jQuery selector for the element to use as a model.
-| `eventTarget`       | `window`   | jQuery selector for the element the event should trigger on.
-| `debug`             | `false`      | If true, write all triggered events to the browser console.
+| `eventTarget`       | `window`       | jQuery selector for the element the event should trigger on.
+| `debug`             | `false`        | If true, write all triggered events to the browser console.
 
 
 ### Retrieving or overriding a setting ###
@@ -114,6 +120,8 @@ jQuery(window).on('bp:md bp:lg', function() {
 
 Because of the way this is done, you will want to write your hooked functions in such a way that the actions are only performed once regardless of how many times the function is called. For instance, if you need to move an element to another place in the DOM on `md` and `lg`, your function should check to make sure it's not already been moved first before trying to move it.
 
+This plugin was designed to be used with a Bootstrap-like mobile-first approach. It assumes that the smallest breakpoint is fluid and that the larger breakpoints use fixed-width outer containers. This is by far the most common way to do things, but if you need fluid containers, or if your responsive framework differs from Bootstrap in other ways beyond just terminology and breakpoint widths, this is probably not the right tool for the job.
+
 If the `modelSelector` does not match an element on the page when the plugin is initialized, the plugin will abort early and will not listen for the `resize` event on the window. The `modelSelector` should point to an element that is always present on the page no matter what, not something that is created or removed dynamically. (If you'd prefer, it can be a zero-height element that exists only for this script to watch.)
 
 ### Why not just use JavaScript to detect window.innerWidth and be done with it? ###
@@ -121,7 +129,6 @@ If the `modelSelector` does not match an element on the page when the plugin is 
 JavaScript's viewport detection is messy and inconsistent between browsers. Also, since JavaScript and CSS are different engines, they are not guaranteed to detect the breakpoint at the same instant. Unless JavaScript delegates its detection to CSS, the actions will be out of sync. 
 
 With this method, the jQuery events will trigger at the exact moment that the model's element width is changed by CSS media queries. We are essentially hooking the jQuery events directly to the media queries.
-
 
 ### Alternative methods for detecting breakpoints with JavaScript ###
 
