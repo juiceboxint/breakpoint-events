@@ -29,7 +29,7 @@ jQuery(document).ready(function() {
 | Setting             | Default Value    | Description
 |:--------------------|:-----------|:------------
 | `defaultBreakpoint` | `xs`       | Name of the breakpoint to use if none of the others are matched. Typically this will be the smallest breakpoint (from width `0` to the first defined breakpoint).
-| `breakpoints`       | `{'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
+| `breakpoints`       | `{ 'sm' : 750, 'md' : 970, 'lg' : 1170 }` | Array containing key-value pairs of the breakpoints and their pixel widths. This width is not necessarily the media query breakpoints themselves, but the defined width of the model element inside each breakpoint. For instance, in Bootstrap, `.container` is 1170px wide at the 1200px breakpoint to allow for a 15px gutter on both sides.
 | `modelSelector`     | `'.container'` | jQuery selector for the element to use as a model.
 | `eventTarget`       | `window`   | jQuery selector for the element the event should trigger on.
 | `debug`             | `false`      | If true, write all triggered events to the browser console.
@@ -39,11 +39,15 @@ jQuery(document).ready(function() {
 
 Retrieve the current setting for `keyName`:
 
-```jQuery(window).breakpointEvents('setting', 'keyName');```
+```javascript
+jQuery(window).breakpointEvents('setting', 'keyName');
+```
 
 Change the setting for `keyName` to `newValue`: (be very, very careful with this!)
 
-```jQuery(window).breakpointEvents('setting', 'keyName', `newValue`);```
+```javascript
+jQuery(window).breakpointEvents('setting', 'keyName', `newValue`);
+```
 
 ## Variables ##
 
@@ -59,17 +63,23 @@ These are used internally to the plugin, but can be viewed or changed at any tim
 
 Retrieve the current setting for `keyName`:
 
-```jQuery(window).breakpointEvents('setting', 'keyName');```
+```javascript
+jQuery(window).breakpointEvents('setting', 'keyName');
+```
 
 Change the setting for `keyName` to `newValue`: (be very, very careful with this!)
 
-```jQuery(window).breakpointEvents('setting', 'keyName', 'newValue');```
+```javascript
+jQuery(window).breakpointEvents('setting', 'keyName', 'newValue');
+```
 
 ### Methods ###
 
 The `setting` and `variable` methods are described above. The other available method is the `refresh` method:
 
-```jQuery(window).breakpointEvents('refresh');```
+```javascript
+jQuery(window).breakpointEvents('refresh');
+```
 
 This will recheck the model element's width and trigger the appropriate events. It's useful if the size of the model has been changed outside of the `resize` event, or if you have updated the breakpoint settings after initialization. It will only trigger events if the breakpoint has changed. It will not re-trigger the event for the current breakpoint.
 
@@ -99,7 +109,7 @@ If the `modelSelector` does not match an element on the page when the plugin is 
 
 This is not new or innovative, but it is nicely packaged and easy to use. There are a few other methods to accomplish essentially the same thing. If this doesn't do the trick for you, check out one of these:
 
- * [Responsive Bootstrap Toolkit](https://github.com/maciej-gurban/responsive-bootstrap-toolkit) - Bases detection on HTML elements, but each breakpoint requires an element to be created on the page that exists only to be watched by the script. Does not trigger custom events.
- * [Breakpoints.js](https://github.com/xoxco/breakpoints) - Triggers jQuery events, but it uses the detected window width rather than watching an HTML element.
- * [jQuery Screen Events](https://github.com/lunsdorf/jquery-screen-events) - Full-featured and well-structured, but again, it detects based on window width rather than HTML element.
- * [Importing CSS Breakpoints Into JavaScript](https://www.lullabot.com/articles/importing-css-breakpoints-into-javascript) - with this method, you use CSS to conditionally insert a `content` value in the `:before` pseudo-element of the `body` based on the current media query, and then use jQuery to retrieve that value. It has the advantage of allowing you to use keywords for the breakpoints without creating new elements on the page, but it's not as neatly packaged as a library and it requires some setup outside the script. Very interesting approach though.
+ * [Responsive Bootstrap Toolkit](https://github.com/maciej-gurban/responsive-bootstrap-toolkit): Bases its detection on HTML elements, but each breakpoint requires an element to be created on the page that exists only to be watched by the script. Does not trigger custom events.
+ * [Breakpoints.js](https://github.com/xoxco/breakpoints): Triggers jQuery events, but it uses the detected window width rather than watching an HTML element.
+ * [jQuery Screen Events](https://github.com/lunsdorf/jquery-screen-events): Full-featured and well-structured, but again, it detects based on window width rather than HTML element.
+ * [Importing CSS Breakpoints Into JavaScript](https://www.lullabot.com/articles/importing-css-breakpoints-into-javascript): With this method, you use CSS to conditionally insert a `content` value in the `:before` pseudo-element of the `body` based on the current media query, and then use jQuery to retrieve that value. It has the advantage of allowing you to use keywords for the breakpoints without creating new elements on the page, but it's not as neatly packaged as a library and it requires some setup outside the script. Very interesting approach though.
