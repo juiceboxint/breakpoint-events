@@ -8,7 +8,7 @@ If you've ever put two functionally-equivalent elements on a page and then set o
 
 If you've ever been concerned about what kind of resources that video background is eating up even when it's hidden on the mobile view... this is for you. Attach the instantiation of the video background to only the larger breakpoints, and destroy it when exiting those breakpoints.
 
-If you've ever been concerned about the performance implications of running a complicated function on the `resize` or `scroll` events that you only need on certain screen sizes... well, you get the idea.
+If you've ever wondered about the performance implications of running a complicated function on the `resize` or `scroll` events that you only need on certain screen sizes... well, you get the idea.
 
 ## Usage ##
 
@@ -40,7 +40,7 @@ jQuery(window).on('bp:md', function() {
 
 If you'd rather the event be triggered on a different element than `window`, you can pass in an `eventTarget` value on initialization.
 
-In many situations, this single event isn't specific enough. You may need to hook a function to a breakpoint's exit irrespective of which one was entered. Or, you may need to do different things depending on whether it's the initial page load or the breakpoint was arrived at from another size. In addition to the `bp:xx` event, any of the following three events are also triggered depending on context.
+In many situations, this single event isn't specific enough. You may need to hook a function to a breakpoint's exit irrespective of which one was entered. Or, you may need to do different actions depending on whether it's the initial page load or the breakpoint was arrived at from another size. In addition to the `bp:xx` event, any of the following three events are also triggered depending on context.
 
   * `bp:xx:initial` indicates the breakpoint on initial page load. It's triggered immediately and only once.
   * `bp:xx:enter` indicates which breakpoint was entered and is always accompanied by a `bp:xx:exit` event.
@@ -48,6 +48,8 @@ In many situations, this single event isn't specific enough. You may need to hoo
 
 
 ## Settings ##
+
+These are set when the plugin is initialized. They can be viewed or changed at any time with the `setting` method.
 
 | Setting             | Default Value  | Description
 |:--------------------|:---------------|:------------
@@ -74,7 +76,7 @@ jQuery(window).breakpointEvents('setting', 'keyName', `newValue`);
 
 ## Variables ##
 
-These are used internally to the plugin, but can be viewed or changed at any time with the `variable` method.
+These are used internally to the plugin. They can be viewed or changed at any time with the `variable` method.
 
 | Variable            | Description
 |:--------------------|:------------
